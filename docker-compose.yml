@@ -1,0 +1,16 @@
+services:
+  redis:
+    image: redis:6-alpine
+    volumes:
+      - "./healthchecks:/healthchecks"
+    healthcheck:
+      test: /healthchecks/redis.sh
+      interval: "5s"
+    ports:
+      - "6379:6379"
+  jdk:
+    image: amazoncorretto:8
+    volumes:
+      - "./:/app"
+    ports:
+      - "8080:8080"
