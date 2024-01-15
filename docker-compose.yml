@@ -8,9 +8,9 @@ services:
       interval: "5s"
     ports:
       - "6379:6379"
-  jdk:
-    image: amazoncorretto:8
-    volumes:
-      - "./:/app"
+  app:
+    build: .
     ports:
-      - "8080:8080"
+      - "80:80"
+    depends_on:
+      - redis
