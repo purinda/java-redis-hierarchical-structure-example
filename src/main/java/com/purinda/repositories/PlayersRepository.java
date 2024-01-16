@@ -10,11 +10,11 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.params.ScanParams;
 import redis.clients.jedis.resps.ScanResult;
 
-public class PlayerNameManagerService {
+public class PlayersRepository {
     private static final String PREFIX = "JRHS:PlayerNames:";
     private Jedis jedis;
 
-    public PlayerNameManagerService(Jedis jedis) {
+    public PlayersRepository(Jedis jedis) {
         this.jedis = jedis;
     }
 

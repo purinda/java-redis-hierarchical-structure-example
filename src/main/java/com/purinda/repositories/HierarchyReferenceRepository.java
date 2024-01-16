@@ -10,12 +10,12 @@ import java.util.Map;
 
 import com.purinda.models.HierarchyReference;
 
-public class HierarchyReferenceManagerService {
+public class HierarchyReferenceRepository {
 
     private static final String KEY_PATH = "JRHS:HierarchyReferences:";
     private Jedis jedis;
 
-    public HierarchyReferenceManagerService(Jedis jedis) {
+    public HierarchyReferenceRepository(Jedis jedis) {
         this.jedis = jedis;
     }
 
