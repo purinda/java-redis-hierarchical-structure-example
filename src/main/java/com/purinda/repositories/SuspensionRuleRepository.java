@@ -10,11 +10,11 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.params.ScanParams;
 import redis.clients.jedis.resps.ScanResult;
 
-public class SuspensionRuleManagerService {
+public class SuspensionRuleRepository {
     private static final String PREFIX = "JRHS:SuspensionRules:";
     private Jedis jedis;
 
-    public SuspensionRuleManagerService(Jedis jedis) {
+    public SuspensionRuleRepository(Jedis jedis) {
         this.jedis = jedis;
     }
 

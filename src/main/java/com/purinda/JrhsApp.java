@@ -7,10 +7,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.purinda.definitions.Rule.RuleType;
-import com.purinda.models.SuspensionRule;
-import com.purinda.repositories.HierarchyReferenceManagerService;
-import com.purinda.repositories.PlayerNameManagerService;
-import com.purinda.repositories.SuspensionRuleManagerService;
+import com.purinda.repositories.HierarchyReferenceRepository;
+import com.purinda.repositories.PlayersRepository;
+import com.purinda.repositories.SuspensionRuleRepository;
 
 import redis.clients.jedis.Jedis;
 
@@ -90,7 +89,7 @@ public class JrhsApp {
     public static void runHierarchyReferencesExamples() {
         // Set hierarchy reference
         System.out.println("Set Hierarchy References");
-        HierarchyReferenceManagerService hrService = new HierarchyReferenceManagerService(jedis);
+        HierarchyReferenceRepository hrService = new HierarchyReferenceRepository(jedis);
         hrService.setHierarchyReference(100, 10, 10, "A");
         hrService.setHierarchyReference(101, 10, 20, "A");
 
@@ -107,7 +106,7 @@ public class JrhsApp {
 
     public static void runPlayerNamesExamples() {
         // Set player names
-        PlayerNameManagerService pnService = new PlayerNameManagerService(jedis);
+        PlayersRepository pnService = new PlayersRepository(jedis);
 
         System.out.println("Set Player Names ");
 
@@ -121,7 +120,7 @@ public class JrhsApp {
 
     public static void runSuspensionRulesExamples() {
         System.out.println("Set Suspension Rules");
-        SuspensionRuleManagerService srService = new SuspensionRuleManagerService(jedis);
+        SuspensionRuleRepository srService = new SuspensionRuleRepository(jedis);
         srService.setSuspensionRule(100, RuleType.SUSPEV);
         srService.setSuspensionRule(101, RuleType.SUSPMKT);
 
@@ -161,7 +160,7 @@ public class JrhsApp {
     }
 
     private static void processHierarchyReferences(JsonNode hierarchyRefsNode) {
-        HierarchyReferenceManagerService hrService = new HierarchyReferenceManagerService(jedis);
+        HierarchyReferenceRepository hrService = new HierarchyReferenceRepository(jedis);
         for (JsonNode refNode : hierarchyRefsNode) {
             int hierRefId = refNode.get("hierarchyRefId").asInt();
             int evClassId = refNode.get("eventClassId").asInt();
@@ -174,7 +173,7 @@ public class JrhsApp {
     }
 
     private static void processSuspensionRules(JsonNode suspensionRulesNode) {
-        SuspensionRuleManagerService srService = new SuspensionRuleManagerService(jedis);
+        SuspensionRuleRepository srService = new SuspensionRuleRepository(jedis);
         for (JsonNode ruleNode : suspensionRulesNode) {
             int ruleId = ruleNode.get("hierarchyRefId").asInt();
             RuleType ruleType = RuleType.valueOf(ruleNode.get("ruleType").asText());
@@ -186,7 +185,7 @@ public class JrhsApp {
     }
 
     private static void processPlayerNames(JsonNode playerNamesNode) {
-        PlayerNameManagerService pnService = new PlayerNameManagerService(jedis);
+        PlayersRepository pnService = new PlayersRepository(jedis);
         for (JsonNode nameNode : playerNamesNode) {
             int playerId = nameNode.get("hierarchyRefId").asInt();
             String name = nameNode.get("name").asText();
