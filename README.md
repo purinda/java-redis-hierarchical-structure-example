@@ -1,8 +1,8 @@
-# Java Redis Hierarchy Data Structure Example
+# Java+Redis Example
 
 ## Introduction
 
-This project demonstrates how to work with hierarchical data structures in Redis using Java.
+This project demonstrates how to work with structured data in Redis using Java.
 
 
 ## Demo
