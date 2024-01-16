@@ -8,7 +8,7 @@ services:
       interval: "5s"
   app:
     build: .
-    ports:
-      - "80:80"
+    links:
+      - redis
     depends_on:
       - redis

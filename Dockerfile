@@ -9,4 +9,4 @@ FROM amazoncorretto:8
 WORKDIR /app
 COPY --from=build /app/target /app/target
 EXPOSE 80
-CMD ["java", "-cp", "target/classes:target/dependency/*", "JRHSApp"]
+CMD ["java", "-cp", "target/classes:target/dependency/*", "com.purinda.JrhsApp"]

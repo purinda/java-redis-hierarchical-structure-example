@@ -1,4 +1,4 @@
-package src;
+package com.purinda;
 
 import redis.clients.jedis.Jedis;
 
