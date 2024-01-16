@@ -42,11 +42,11 @@ public class JrhsApp {
     public static void runPlayerNamesExamples() {
         // Set player names
         PlayerNameManagerService pnService = new PlayerNameManagerService(jedis);
-        pnService.setPlayerName(100, "Will Smith");
-        pnService.setPlayerName(101, "Jane Doe");
-        pnService.setPlayerName(102, "Sam Smith");
+        pnService.addPlayerName(100, "Will Smith");
+        pnService.addPlayerName(100, "Jane Doe");
+        pnService.addPlayerName(101, "Sam Smith");
 
-        System.out.println("Getting a single Player Name: " + pnService.getPlayerName(101));
+        System.out.println("Getting a single Player Name: " + pnService.getPlayerNames(100));
         System.out.println("Getting all Player Names: " + pnService.getAllPlayerNames());
     }
 }

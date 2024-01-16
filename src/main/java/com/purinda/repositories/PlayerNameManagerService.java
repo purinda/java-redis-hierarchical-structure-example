@@ -2,6 +2,7 @@ package com.purinda.repositories;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.purinda.models.PlayerName;
 
@@ -17,38 +18,44 @@ public class PlayerNameManagerService {
         this.jedis = jedis;
     }
 
-    public void setPlayerName(int playerId, String playerName) {
-        String key = PREFIX + playerId;
-        jedis.set(key, playerName);
+    public void addPlayerName(int hierarchyReferenceID, String playerName) {
+        String key = PREFIX + hierarchyReferenceID;
+        jedis.sadd(key, playerName);
     }
 
-    public String getPlayerName(int playerId) {
-        String key = PREFIX + playerId;
-        return jedis.get(key);
+    public List<PlayerName> getPlayerNames(int hierarchyReferenceID) {
+        String key = PREFIX + hierarchyReferenceID;
+        Set<String> names = jedis.smembers(key);
+        
+        List<PlayerName> playerNames = new ArrayList<>();
+        for (String name : names) {
+            playerNames.add(new PlayerName(hierarchyReferenceID, name));
+        }
+    
+        return playerNames;
     }
 
     public List<PlayerName> getAllPlayerNames() {
         List<PlayerName> list = new ArrayList<>();
         String cursor = "0";
-        ScanParams scanParams = new ScanParams().match(PREFIX + "PlayerNames:*").count(100);
+        ScanParams scanParams = new ScanParams().match(PREFIX + "*").count(100);
         do {
             ScanResult<String> scanResult = jedis.scan(cursor, scanParams);
             List<String> keys = scanResult.getResult();
             for (String key : keys) {
-                String playerName = jedis.hget(key, "player_name");
-                PlayerName pn = new PlayerName(
-                        Integer.parseInt(key.split(":")[2]),
-                        playerName);
-                list.add(pn);
+                Set<String> playerNames = jedis.smembers(key);
+                int hierarchyReferenceID = Integer.parseInt(key.split(":")[2]);
+                for (String playerName : playerNames) {
+                    list.add(new PlayerName(hierarchyReferenceID, playerName));
+                }
             }
             cursor = scanResult.getCursor();
         } while (!cursor.equals("0"));
         return list;
     }
 
-    public void deletePlayerName(int playerId) {
-        String key = PREFIX + playerId;
+    public void deletePlayerName(int hierarchyReferenceID) {
+        String key = PREFIX + hierarchyReferenceID;
         jedis.del(key);
     }
-
 }
