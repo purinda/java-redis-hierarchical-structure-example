@@ -10,15 +10,32 @@ import java.util.Map;
 
 import com.purinda.models.HierarchyReference;
 
+/**
+ * This class provides repository functions for managing hierarchy references
+ * in a Redis data store.
+ */
 public class HierarchyReferenceRepository {
 
     private static final String KEY_PATH = "JRHS:HierarchyReferences:";
     private Jedis jedis;
 
+    /**
+     * Constructs a new repository instance with a given Jedis connection.
+     * 
+     * @param jedis the Jedis connection to be used for Redis operations
+     */
     public HierarchyReferenceRepository(Jedis jedis) {
         this.jedis = jedis;
     }
 
+    /**
+     * Stores a hierarchy reference in Redis.
+     *
+     * @param underageHierId The hierarchy reference ID
+     * @param evClassId The event class ID
+     * @param evTypeId The event type ID
+     * @param status The status of the hierarchy reference
+     */
     public void setHierarchyReference(int underageHierId, int evClassId, int evTypeId, String status) {
         String key = KEY_PATH + underageHierId;
         jedis.hset(key, "ev_class_id", String.valueOf(evClassId));
@@ -26,11 +43,22 @@ public class HierarchyReferenceRepository {
         jedis.hset(key, "status", status);
     }
 
+    /**
+     * Retrieves a hierarchy reference from Redis.
+     *
+     * @param underageHierId The hierarchy reference ID to retrieve
+     * @return A map containing the fields of the hierarchy reference
+     */
     public Map<String, String> getHierarchyReference(int underageHierId) {
         String key = KEY_PATH + underageHierId;
         return jedis.hgetAll(key);
     }
 
+    /**
+     * Retrieves all hierarchy references from Redis and return in form of list of HierarchyReference objects.
+     * 
+     * @return A list of HierarchyReference objects
+     */
     public List<HierarchyReference> getAllHierarchyReferences() {
         List<HierarchyReference> list = new ArrayList<>();
         String cursor = "0";
@@ -52,6 +80,11 @@ public class HierarchyReferenceRepository {
         return list;
     }
 
+    /**
+     * Deletes a hierarchy reference from Redis.
+     *
+     * @param underageHierId The ID of the hierarchy reference to delete
+     */
     public void deleteHierarchyReference(int underageHierId) {
         String key = KEY_PATH + underageHierId;
         jedis.del(key);
