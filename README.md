@@ -16,6 +16,9 @@ The project includes a Dockerfile and a docker-compose.yml file for running the 
 
 To build and run the application in Docker, use the following commands:
 
+    git clone https://github.com/purinda/java-redis-hierarchical-structure-example.git
+    cd java-redis-hierarchical-structure-example
+
     docker-compose build
     docker-compose up -d
 
