@@ -1,0 +1,59 @@
+package com.purinda.repositories;
+
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.params.ScanParams;
+import redis.clients.jedis.resps.ScanResult;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import com.purinda.models.HierarchyReference;
+
+public class HierarchyReferenceManagerService {
+
+    private static final String KEY_PATH = "JRHS:HierarchyReferences:";
+    private Jedis jedis;
+
+    public HierarchyReferenceManagerService(Jedis jedis) {
+        this.jedis = jedis;
+    }
+
+    public void setHierarchyReference(int underageHierId, int evClassId, int evTypeId, String status) {
+        String key = KEY_PATH + underageHierId;
+        jedis.hset(key, "ev_class_id", String.valueOf(evClassId));
+        jedis.hset(key, "ev_type_id", String.valueOf(evTypeId));
+        jedis.hset(key, "status", status);
+    }
+
+    public Map<String, String> getHierarchyReference(int underageHierId) {
+        String key = KEY_PATH + underageHierId;
+        return jedis.hgetAll(key);
+    }
+
+    public List<HierarchyReference> getAllHierarchyReferences() {
+        List<HierarchyReference> list = new ArrayList<>();
+        String cursor = "0";
+        ScanParams scanParams = new ScanParams().match(KEY_PATH + "*").count(100);
+        do {
+            ScanResult<String> scanResult = jedis.scan(cursor, scanParams);
+            List<String> keys = scanResult.getResult();
+            for (String key : keys) {
+                Map<String, String> fields = jedis.hgetAll(key);
+                HierarchyReference hr = new HierarchyReference(
+                        Integer.parseInt(key.split(":")[2]),
+                        Integer.parseInt(fields.get("ev_class_id")),
+                        Integer.parseInt(fields.get("ev_type_id")),
+                        fields.get("status"));
+                list.add(hr);
+            }
+            cursor = scanResult.getCursor();
+        } while (!cursor.equals("0"));
+        return list;
+    }
+
+    public void deleteHierarchyReference(int underageHierId) {
+        String key = KEY_PATH + underageHierId;
+        jedis.del(key);
+    }
+}
