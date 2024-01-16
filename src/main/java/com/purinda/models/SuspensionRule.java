@@ -1,10 +1,12 @@
 package com.purinda.models;
 
+import com.purinda.definitions.Rule.RuleType;
+
 public class SuspensionRule {
     private int underageHierId;
-    private String rule;
+    private RuleType rule;
 
-    public SuspensionRule(int underageHierId, String rule) {
+    public SuspensionRule(int underageHierId, RuleType rule) {
         this.underageHierId = underageHierId;
         this.rule = rule;
     }
