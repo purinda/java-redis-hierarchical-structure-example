@@ -1,6 +1,10 @@
+import java.util.Map;
+
+import src.Client;
+
 public class JRHSApp {
     public static void main(String[] args) {
-        HucRedisClient client = new HucRedisClient("localhost", 6379);
+        Client client = new Client("redis", 6379);
 
         // Set hierarchy reference
         client.setHierarchyReference(101, 10, 20, "A");
